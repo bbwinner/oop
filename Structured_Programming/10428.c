@@ -11,6 +11,7 @@ int main(){
     init(grid);
 
     row = count_row(grid, n);
+    col = count_col(grid, n);
     
     // for(int i=0; i<MAX-n+1; ++i){
     //     uint64_t temp;

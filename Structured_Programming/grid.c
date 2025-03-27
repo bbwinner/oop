@@ -17,3 +17,17 @@ int count_row(uint64_t arr[], int n){
     }
     return row;
 }
+
+int count_col(uint64_t arr[], int n){
+    int col=0;
+    for(int i=0; i<MAX-n+1; ++i){
+        uint64_t temp;
+        bool flag;
+        for(int j=0; j<64; ++j){
+            flag = 1;
+            for(int k=0; k<n; ++k) if(!(arr[i+k]&((1ULL<<j)))) flag=0;
+            if(flag) col++;
+        }
+    }
+    return col;
+}
