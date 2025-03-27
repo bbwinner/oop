@@ -12,16 +12,11 @@ int main(){
 
     row = count_row(grid, n);
     col = count_col(grid, n);
+    dia = count_dia(grid, n);
     
     // for(int i=0; i<MAX-n+1; ++i){
     //     uint64_t temp;
     //     short int flag;
-    //     // row
-    //     for(int j=0; j<64; ++j){
-    //         flag = 1;
-    //         for(int k=0; k<n; ++k) if(!(arr[i+k]&((1ULL<<j)))) flag=0;
-    //         if(flag) col++;
-    //     }
  
     //     // dia
     //     for(int j=0; j<64-n+1; ++j){
