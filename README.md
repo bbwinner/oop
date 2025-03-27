@@ -9,4 +9,4 @@
 
 ### Result
 
-- Problem: [50301. String Arithmetic](https://judgegirl.csie.org/problem/0/50301)
+- Problem: [10428. $n$ in a Grid](https://judgegirl.csie.org/problem/305/10428)
