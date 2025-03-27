@@ -42,3 +42,15 @@ int count_dia(uint64_t arr[], int n){
     }
     return dia;
 }
+
+int count_adia(uint64_t arr[], int n){
+    int adia=0;
+    for(int i=0; i<MAX-n+1; ++i){
+        for(int j=0; j<64-n+1; ++j){
+            bool flag=1;
+            for(int k=0; k<n; ++k) if(!(arr[i+k]&((1ULL<<(j+k))))) flag=0;
+            if(flag) adia++;
+        }
+    }
+    return adia;
+}
