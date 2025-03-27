@@ -1,17 +1,16 @@
-# include <stdio.h>
-# include <stdint.h>
 # include "grid.h"
 # define MAX 75000
 
 int main(){
-    int n, row=0, col=0, dia=0, adia=0;
-    uint64_t grid[MAX];
+    int row=0, col=0, dia=0, adia=0;
 
-    init(grid, n);
-    // for(int j=0; j<64-n+1; ++j){
-    //     uint64_t temp = ((1ULL<<(n))-1)<<j;
-    //     if((arr[i] & temp) == temp) row++;
-    // }
+    // Actually private member
+    int n;
+    uint64_t grid[MAX];
+    scanf("%d", &n);
+    init(grid);
+
+    row = count_row(grid, n);
     
     // for(int i=0; i<MAX-n+1; ++i){
     //     uint64_t temp;
@@ -33,5 +32,5 @@ int main(){
     //         if(flag) adia++;
     //     }
     // }
-    // printf("%d\n%d\n%d\n%d\n", row, col, dia, adia);
+    printf("%d\n%d\n%d\n%d\n", row, col, dia, adia);
 }
