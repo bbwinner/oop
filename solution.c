@@ -1,25 +1,12 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <stdbool.h>
-#define int long long
 
 typedef struct{
-    int top;
-    int data[5000];
+    long long top;
+    long long data[5000];
 }Stack;
-
-Stack chg, res;
-
-/*
-( : 40 -> -1
-) : 41 -> -2
-* : 42 -> -4
-/ : 47 -> -5
-% : 37 -> -6
-+ : 43 -> -9
-- : 45 -> -10
-num >= 48
-*/
 
 void init(Stack* S){
     S->top = -1;
@@ -40,10 +27,10 @@ int top(Stack* S){
 }
 
 bool empty(Stack* S){
-    return (S->top<=-1);
+    return (S->top <= -1);
 }
 
-void print_opt(int o){
+void print_opt(long long o){
     if(o==-10) putchar('-');
     else if(o==-9) putchar('+');
     else if(o==-6) putchar('%');
@@ -51,15 +38,11 @@ void print_opt(int o){
     else if(o==-4) putchar('*');
 }
 
-int convert(int o){
-    if(o==42) return -4;
-    if(o==47) return -5;
-    if(o==37) return -6;
-    if(o==43) return -9;
-    if(o==45) return -10;
+long long convert_opt(long long o){
+    return (o-48);
 }
 
-int compute(int a, int b, int o){
+long long compute(long long a, long long b, long long o){
     if(o==-10) return a-b;
     if(o==-9) return a+b;
     if(o==-6) return a%b;
@@ -67,64 +50,83 @@ int compute(int a, int b, int o){
     if(o==-4) return a*b;
 }
 
-int pri(int o){
-    if(o>-3) return 0;
-    if(o>-8) return 2;
-    return 1;
+long long priority(long long o){
+    if(o == -8) return 0;
+    if(o == -3 || o == -5) return 1;
+    else return 2;
 }
 
 // operator < 0
-void output(int o){
+void output(Stack* res, long long o){
     if(o>=0) {
         printf("%lld", o);
-        push(&res, o);
+        push(res, o);
     }else{
         print_opt(o);
-        int b = pop(&res);
-        int a = pop(&res);
-        push(&res, compute(a, b, o));
+
+        long long b = pop(res);
+        long long a = pop(res);
+        push(res, compute(a, b, o));
     }
 }
 
-void in_to_post(char req[]){
-    int len = strlen(req);
-    long long num=-1;
+void in_to_post(Stack* chg, Stack* res, char req[]){
+    long long len = strlen(req);
+    long long num = -1;
+
     for(int i=0; i<len; ++i){
-        long long opt = req[i];
-        if(opt >= 48){
-            if(num==-1) num = opt-48;
-            else num = num*10 + opt-48;
+        long long token = req[i];
+
+        if(token >= 48){
+            if(num==-1)
+                num = token - 48;
+            else
+                num = num*10 + token - 48;
         }else{
-            if(num!=-1) {output(num); num=-1;}
-            if(opt == 40){
-                push(&chg, -1);
-            }else if(opt == 41){
-                while(!empty(&chg) && top(&chg)!=-1){
-                    output(pop(&chg));
+            if(num!=-1) {
+                output(res, num);
+                num = -1;
+            }
+
+            if(token == 40){ // '('
+                push(chg, convert_opt(token));
+            }else if(token == 41){ // ')'
+                while(!empty(chg) && top(chg)!=-8){
+                    output(res, pop(chg));
                 }
-                pop(&chg);
+
+                pop(chg);
             }else{
-                opt = convert(opt);
-                while(!empty(&chg) && pri(top(&chg))>=pri(opt)){
-                    output(pop(&chg));
+                token = convert_opt(token);
+                while(!empty(chg) && priority(top(chg))>=priority(token)){
+                    output(res, pop(chg));
                 }
-                push(&chg, opt);
+                push(chg, token);
             }
         }
     }
-    if(num>=0) output(num);
-    while(!empty(&chg)){
-        output(pop(&chg));
+
+    if(num >= 0) output(res, num);
+
+    while(!empty(chg)){
+        output(res, pop(chg));
     }
     
 }
 
-signed main(){
+int main(){
     char req[4005];
-    int temp;
+
     while(scanf("%s", req)!=EOF){
-        init(&chg); init(&res);
-        in_to_post(req);
-        printf("=%lld\n", top(&res));
+        Stack* chg = (Stack*) malloc(sizeof(Stack));
+        init(chg);
+        Stack* res = (Stack*) malloc(sizeof(Stack));
+        init(res);
+
+        in_to_post(chg, res, req);
+
+        printf("=%lld\n", top(res));
     }
+
+    return 0;
 }
